@@ -28,8 +28,8 @@ table{
 	text-align:center;
 	border-color:#00ffff;
 	background-color: grey;
-	text-color:red;
 	border-collapse: seperate;
+	color: blue
 }
 </style>
 </head>

@@ -107,22 +107,22 @@ public class Reports extends HttpServlet {
 				break;
 			case "C":
 				sql ="Select assignment from StrongheimGradebook where TYPE = '" +type +"' and studentId = " + id;
-				message+= "<b>Report: All assignment for student " + id +" of assignment type = " + type +"<b>";
+				message+= "<b>Report: All assignment for student " + id +" of assignment type " + type +"<b>";
 				message += "<table border=2 width = 20% background-color:Light grey>"; 
 				break;
 			case "D":
-				sql ="Select avg(grade) from StrongheimGradebook where STUDENTID =" +id;
+				sql ="Select ROUND(avg(grade),3) from StrongheimGradebook where STUDENTID =" +id;
 				message+= "<b>Report: Average Grade for student " + id +"<b>";
 				message += "<table border=2 width = 20% background-color:Light grey>"; 
 				break;
 			case "E":
-				sql ="Select type,avg(grade) from StrongheimGradebook  where studentId = " + id + " group by type";
+				sql ="Select type,ROUND(avg(grade),3) from StrongheimGradebook  where studentId = " + id + " group by type";
 				message+= "<b>Report: Average Grade for student " + id +" according to type of assignment<b>";
 				message += "<table border=2 width = 30% background-color:Light grey>"; 
 				break;
 			case "F":
 				sql="select max(grade), min(grade) from StrongheimGradebook where type= '" + type +"'" ;
-				message+= "<b>Report: Highest and Lowest Score for assignmen" + id +"<b>";
+				message+= "<b>Report: Highest and Lowest Score for assignment " + type +"<b>";
 				message += "<table border=2 width = 20% background-color:Light grey>"; 
 				break;
 		}
@@ -133,23 +133,23 @@ public class Reports extends HttpServlet {
 			if(reportType.equalsIgnoreCase("F")){
 						
 				if (rs.next()) {
-					message += "<tr><th><b>Highest Score</b></th><th><b>Lowest Score</b></th></tr>";
+					message += "<tr><th><b>HIGHEST SCORE</b></th><th><b>LOWEST SCORE</b></th></tr>";
 					message += ("<tr><td>" + rs.getString(1) + "</td><td>" + rs.getString(2) + "</td></tr>");
 				}
 			}else if (reportType.equalsIgnoreCase("E")){
-				while (rs.next()) {
-					message += "<tr><th><b>Assignment Type</b></th><th><b>Average Grade</b></th></tr>";
+				message += "<tr><th><b>ASSIGNMENT TYPE</b></th><th><b>AVERAGE GRADE</b></th></tr>";
+				while (rs.next()) {					
 					message += ("<tr><td>" + rs.getString(1)  + "</td><td>" + rs.getString(2) +"</td></tr>");
 				}
 			}
 			else if (reportType.equalsIgnoreCase("D")){
 				if (rs.next()) {
-					message += "<tr><th><b>Average Grade</b></th></tr>";
+					message += "<tr><th><b>AVERAGE GRADE</b></th></tr>";
 					message += ("<tr><td>" + rs.getString(1)  + "</td></tr>");
 				}
 			}
 			else{		
-				message += "<tr><th align=center><b>Assigngment Name</b></th><tr>";
+				message += "<tr><th><b>ASSIGNMENT NAME</b></th><tr>";
 				while (rs.next()) {
 					message += ("<tr><td>" + rs.getString(1) + "</td></tr>");
 				}
@@ -209,8 +209,8 @@ public class Reports extends HttpServlet {
 			showErrorMessage(errorMessages, response);
 		} else {
 		
-			message +="<div class='col-sm-offset-2 col-sm-10'><p><a href='GradeBook.jsp' class='btn btn-primary btn-lg' role='button'>Go to Home Page</a></p></div>";
 			message+=getReports(studentId, aType, reportType);			
+			message +="<div class='col-sm-offset-2 col-sm-10'><p><a href='GradeBook.jsp' class='btn btn-primary btn-lg' role='button'>Go to Home Page</a></p></div>";
 			request.setAttribute("message", message);
 			getServletContext().getRequestDispatcher("/Reports.jsp").forward(
 					request, response);
